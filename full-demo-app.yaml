@@ -1,0 +1,18 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: demo-app
+spec:
+  components:
+    - name: redis-single-node
+      type: redis-back
+    - name: guestbook
+      type: frontend
+      properties:
+        name: guestbook
+        image: gcr.io/google-samples/gb-frontend:v3
+        port: 80
+      # traits:
+      #   - type: autoscaler
+      #     properties:
+      #       min: 3

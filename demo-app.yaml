@@ -1,18 +1,16 @@
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: devops-toolkit
+  name: hello-app
 spec:
   components:
-    - name: redis-single-node
-      type: redis-back
-    - name: guestbook
+    - name: hello-kubernetes
       type: frontend
       properties:
-        name: guestbook
-        image: gcr.io/google-samples/gb-frontend:v3
+        name: hello-kubernetes
+        image: httpd:latest
         port: 80
       # traits:
       #   - type: autoscaler
       #     properties:
-      #       min: 3
+      #       min: 3docker pull paulbouwer/hello-kubernetes:1.10

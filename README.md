@@ -21,6 +21,7 @@ kubectl apply --namespace vela-system --filename traits.yaml
 ## Deploy
 
 ```
-kubectl create namesapce testing
-kubectl apply --namespace testing --filename dt-full.yaml
+kubectl create namespace testing
+kubectl apply --namespace testing --filename demo-app.yaml
+kubectl apply --namespace testing --filename full-demo-app.yaml
 ```
