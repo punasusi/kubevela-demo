@@ -1,0 +1,135 @@
+apiVersion: core.oam.dev/v1beta1
+kind: ComponentDefinition
+metadata:
+  name: frontend
+  namespace: vela-system
+  annotations:
+    definition.oam.dev/description: "Basic frontend app deployment, with a service."
+spec:
+  workload:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+  schematic:
+    cue:
+      template: |
+        output: {
+          apiVersion: "apps/v1"
+          kind:       "Deployment"
+          spec: {
+            selector: matchLabels: {
+              "app.oam.dev/component": context.name
+            }
+            template: {
+              metadata: labels: {
+                "app.oam.dev/component": context.name
+              }
+              spec: containers: [{
+                name:  context.name
+                image: parameter.image
+                ports: [{
+                  containerPort: parameter.port
+                }]
+                resources: limits: {
+                  cpu:    "200m"
+                  memory: "200Mi"
+                }
+              }]
+            }
+          }
+
+        }
+        outputs: frontend: {
+          metadata: {
+            labels: {
+              "app.oam.dev/component": context.name
+            }
+          }
+          spec: {
+            ports: [{
+              port: parameter.port
+            }]
+            selector: {
+              "app.oam.dev/component": context.name
+            }
+            type: "ClusterIP"
+          }
+          apiVersion: "v1"
+          kind:       "Service"
+        }
+        parameter: {
+            image: string
+            port: number
+        }
+      
+
+---
+apiVersion: core.oam.dev/v1beta1
+kind: ComponentDefinition
+metadata:
+  name: redis-back
+  namespace: vela-system
+  annotations:
+    definition.oam.dev/description: "Redis backend"
+spec:
+  workload:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+  schematic:
+    cue:
+      template: |
+        output: {
+          metadata: name: "redis-master"
+          spec: {
+            replicas: 1
+            selector: matchLabels: {
+              app:  "redis"
+              role: "master"
+            }
+            template: {
+              metadata: labels: {
+                app:  "redis"
+                role: "master"
+              }
+              spec: containers: [{
+                name:  "master"
+                image: "redis"
+                ports: [{
+                  containerPort: 6379
+                }]
+                resources: requests: {
+                  cpu:    "100m"
+                  memory: "100Mi"
+                }
+              }]
+            }
+          }
+          apiVersion: "apps/v1"
+          kind:       "Deployment"
+        }
+        outputs: "redis-master": {
+          metadata: {
+            name: "redis-master"
+            labels: {
+              app:  "redis"
+              role: "master"
+            }
+          }
+          spec: {
+            ports: [{
+              port:       6379
+              targetPort: 6379
+            }]
+            selector: {
+              app:  "redis"
+              role: "master"
+            }
+          }
+          apiVersion: "v1"
+          kind:       "Service"
+        } 
+        parameter: {
+        }
+
+---
