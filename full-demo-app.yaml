@@ -12,7 +12,7 @@ spec:
         name: guestbook
         image: gcr.io/google-samples/gb-frontend:v3
         port: 80
-      # traits:
-      #   - type: autoscaler
-      #     properties:
-      #       min: 3
+      traits:
+        - type: autoscaler
+          properties:
+            min: 3

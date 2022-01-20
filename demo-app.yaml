@@ -10,7 +10,3 @@ spec:
         name: hello-kubernetes
         image: httpd:latest
         port: 80
-      # traits:
-      #   - type: autoscaler
-      #     properties:
-      #       min: 3docker pull paulbouwer/hello-kubernetes:1.10
