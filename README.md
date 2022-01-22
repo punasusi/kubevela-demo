@@ -1,5 +1,7 @@
 # kubevela-demo
 
+For more examples, see also: https://github.com/oam-dev/samples
+
 ## Install
 ```
 helm repo add kubevela \
